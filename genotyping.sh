@@ -81,7 +81,7 @@ cat > $jobfile0 <<EOA # generate the job file
 #!/bin/bash
 #SBATCH --job-name=0_ubam
 #SBATCH --partition=carl.p
-#SBATCH --array=2-53
+#SBATCH --array=2-52
 #SBATCH --output=$BASE_DIR/logs/0_ubam_%A_%a.out
 #SBATCH --error=$BASE_DIR/logs/0_ubam_%A_%a.err
 #SBATCH --nodes=1
@@ -110,8 +110,8 @@ echo -e "Read group:\t\${flowcellidfrwd}.\${lanefrwd}\nCompany:\t\${company}"
 gatk --java-options "-Xmx20G" \
     FastqToSam \
     -SM \${label} \
-    -F1 $BASE_DIR/data/\${frwdfile} \
-    -F2 $BASE_DIR/data/\${revfile} \
+    -F1 /user/doau0129/data/description_paper/\${frwdfile} \
+    -F2 /user/doau0129/data/description_paper/\${revfile} \
     -O $BASE_DIR/outputs/0_ubam/\${label}.\${lanefrwd}.ubam.bam \
     -RG \${label}.\${lanefrwd} \
     -LB \${label}".lib1" \
@@ -137,7 +137,7 @@ cat > $jobfile1 <<EOA # generate the job file
 #!/bin/bash
 #SBATCH --job-name=1_adapters
 #SBATCH --partition=carl.p
-#SBATCH --array=1-52
+#SBATCH --array=1-51
 #SBATCH --output=$BASE_DIR/logs/1_adapters_%A_%a.out
 #SBATCH --error=$BASE_DIR/logs/1_adapters_%A_%a.err
 #SBATCH --nodes=1
@@ -177,7 +177,7 @@ cat > $jobfile2 <<EOA # generate the job file
 #!/bin/bash
 #SBATCH --job-name=2_align
 #SBATCH --partition=mpcb.p
-#SBATCH --array=1-52
+#SBATCH --array=1-51
 #SBATCH --output=$BASE_DIR/logs/2_align_%A_%a.out
 #SBATCH --error=$BASE_DIR/logs/2_align_%A_%a.err
 #SBATCH --nodes=1
@@ -241,7 +241,7 @@ cat > $jobfile3 <<EOA # generate the job file
 #!/bin/bash
 #SBATCH --job-name=3_tag
 #SBATCH --partition=carl.p
-#SBATCH --array=1-52
+#SBATCH --array=1-51
 #SBATCH --output=$BASE_DIR/logs/3_tag_%A_%a.out
 #SBATCH --error=$BASE_DIR/logs/3_tag_%A_%a.err
 #SBATCH --nodes=1
@@ -256,12 +256,14 @@ MAPPED_BAM=\$(cat \${INPUT_MAPPED_BAM} | head -n \${SLURM_ARRAY_TASK_ID} | tail 
 echo \${MAPPED_BAM}
 
 sample1=\${MAPPED_BAM%.*}
-sample=\${sample1%.*}
+sample2=\${sample1%.*}
+echo \${sample2}
+sample=\${sample2##*/}
 echo \${sample}
 
 gatk --java-options "-Xmx30G" \
 		SortSam \
-		-I $BASE_DIR/outputs/2_align/\${MAPPED_BAM} \
+		-I \${MAPPED_BAM} \
 		-O /dev/stdout \
 		--SORT_ORDER "coordinate" \
 		--CREATE_INDEX false \
@@ -290,7 +292,7 @@ cat > $jobfile4 <<EOA # generate the job file
 #!/bin/bash
 #SBATCH --job-name=4_mark
 #SBATCH --partition=carl.p
-#SBATCH --array=1-52
+#SBATCH --array=1-51
 #SBATCH --output=$BASE_DIR/logs/4_mark_%A_%a.out
 #SBATCH --error=$BASE_DIR/logs/4_mark_%A_%a.err
 #SBATCH --nodes=1
@@ -331,7 +333,7 @@ cat > $jobfile5 <<EOA # generate the job file
 #!/bin/bash
 #SBATCH --job-name=5_index
 #SBATCH --partition=carl.p
-#SBATCH --array=1-52
+#SBATCH --array=1-51
 #SBATCH --output=$BASE_DIR/logs/5_index_%A_%a.out
 #SBATCH --error=$BASE_DIR/logs/5_index_%A_%a.err
 #SBATCH --nodes=1
@@ -368,7 +370,7 @@ cat > $jobfilea <<EOA # generate the job file
 #!/bin/bash
 #SBATCH --job-name=a_coverage
 #SBATCH --partition=carl.p
-#SBATCH --array=1-52
+#SBATCH --array=1-51
 #SBATCH --output=$BASE_DIR/logs/a_coverage_%A_%a.out
 #SBATCH --error=$BASE_DIR/logs/a_coverage_%A_%a.err
 #SBATCH --nodes=1
