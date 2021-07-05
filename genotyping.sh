@@ -516,6 +516,7 @@ DUPLI=\$(cat \${INPUT_DUPLI} | head -n \${SLURM_ARRAY_TASK_ID} | tail -n 1)
 echo \$DUPLI
 
 files="\$(ls -1 $BASE_DIR/outputs/3_duplicates/3_mark/duplicates/*.bam | grep \${DUPLI})"
+echo \${files}
 
 # sample1=\${DUPLI%.*}
 # sample=\${sample1%.*}
