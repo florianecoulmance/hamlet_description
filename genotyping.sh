@@ -474,13 +474,13 @@ cat > $jobfilec <<EOA # generate the job file
 #SBATCH --time=02:00:00
 
 
-for file in \$(cat $BASE_DIR/outputs/lof/c_remove.fofn)
-do
-  echo \$file
-  mv  $BASE_DIR/outputs/3_duplicates/3_mark/duplicates/\$file $BASE_DIR/outputs/3_duplicates/3_mark/duplicates/removed/
-done
+# for file in \$(cat $BASE_DIR/outputs/lof/c_remove.fofn)
+# do
+#   echo \$file
+#   mv  $BASE_DIR/outputs/3_duplicates/3_mark/duplicates/\$file $BASE_DIR/outputs/3_duplicates/3_mark/duplicates/removed/
+# done
 
-ls -1 $BASE_DIR/outputs/3_duplicates/3_mark/duplicates/*.bam |xargs -n1 basename > $BASE_DIR/outputs/lof/3_3_new_duplicates.fofn
+ls -1 $BASE_DIR/outputs/3_duplicates/3_mark/duplicates/*.bam | xargs -n1 basename | awk -F. '{print \$1}' | sort -u > $BASE_DIR/outputs/lof/3_3_new_duplicates.fofn
 
 
 EOA
@@ -490,8 +490,8 @@ EOA
 # --------------------------- GENOTYPING --------------------------------------#
 
 # Create array size based on files not removed at previous step
-SIZE=$(wc $BASE_DIR/outputs/lof/3_3_new_duplicates.fofn | awk '{print $1}')
-echo $SIZE
+# SIZE=$(wc $BASE_DIR/outputs/lof/3_3_new_duplicates.fofn | awk '{print $1}')
+# echo $SIZE
 
 # ------------------------------------------------------------------------------
 # Job 6 calculates genotype likelihoods
@@ -501,7 +501,7 @@ cat > $jobfile6 <<EOA # generate the job file
 #!/bin/bash
 #SBATCH --job-name=6_likelihood
 #SBATCH --partition=carl.p
-#SBATCH --array=1-$SIZE
+#SBATCH --array=1-43
 #SBATCH --output=$BASE_DIR/logs/6_likelihood_%A_%a.out
 #SBATCH --error=$BASE_DIR/logs/6_likelihood_%A_%a.err
 #SBATCH --nodes=1
@@ -515,14 +515,16 @@ INPUT_DUPLI=$BASE_DIR/outputs/lof/3_3_new_duplicates.fofn
 DUPLI=\$(cat \${INPUT_DUPLI} | head -n \${SLURM_ARRAY_TASK_ID} | tail -n 1)
 echo \$DUPLI
 
-sample1=\${DUPLI%.*}
-sample=\${sample1%.*}
-echo \$sample
+files="\$(ls -1 $BASE_DIR/outputs/3_duplicates/3_mark/duplicates/*.bam | grep \${DUPLI})"
+
+# sample1=\${DUPLI%.*}
+# sample=\${sample1%.*}
+# echo \$sample
 
 gatk --java-options "-Xmx35g" HaplotypeCaller  \
      -R $BASE_DIR/ressources/HP_genome_unmasked_01.fa \
-     -I $BASE_DIR/outputs/3_duplicates/3_mark/duplicates/\${DUPLI} \
-     -O $BASE_DIR/outputs/4_likelihood/\${sample}.g.vcf.gz \
+     -I $\{files} \
+     -O $BASE_DIR/outputs/4_likelihood/\${DUPLI}.g.vcf.gz \
      -ERC GVCF
 
 ls -1 $BASE_DIR/outputs/4_likelihood/*.g.vcf.gz > $BASE_DIR/outputs/lof/4_likelihood.fofn
