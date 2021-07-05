@@ -435,12 +435,13 @@ do
   echo \$name_file
   sample1=\${name_file%.*}
   sample2=\${sample1%.*}
+  echo \$sample2
   sample=\${sample2%.*}
   echo \$sample
   cov=\$(cat \$f | awk 'FNR == 8 {print \$2}')
   echo \$cov
 
-  echo "\$sample \$cov" >> $BASE_DIR/outputs/coverage/coverage_table
+  echo "\$sample2 \$cov" >> $BASE_DIR/outputs/coverage/coverage_table
 done
 
 Rscript --vanilla $BASE_DIR/R/coverage_hist.R $BASE_DIR/outputs/coverage/coverage_table $BASE_DIR/figures/ $BASE_DIR/outputs/lof/
