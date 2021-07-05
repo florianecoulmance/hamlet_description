@@ -518,15 +518,18 @@ echo \$DUPLI
 files="\$(ls -1 $BASE_DIR/outputs/3_duplicates/3_mark/duplicates/*.bam | grep \${DUPLI})"
 echo \${files}
 
+INPUT=\$(awk '{print "-I", $1, "-I", $2}' \${files})
+echo \${INPUT}
+
 # sample1=\${DUPLI%.*}
 # sample=\${sample1%.*}
 # echo \$sample
 
-gatk --java-options "-Xmx35g" HaplotypeCaller  \
-     -R $BASE_DIR/ressources/HP_genome_unmasked_01.fa \
-     -I $\{files} \
-     -O $BASE_DIR/outputs/4_likelihood/\${DUPLI}.g.vcf.gz \
-     -ERC GVCF
+# gatk --java-options "-Xmx35g" HaplotypeCaller  \
+#      -R $BASE_DIR/ressources/HP_genome_unmasked_01.fa \
+#      -I $\{INPUT} \
+#      -O $BASE_DIR/outputs/4_likelihood/\${DUPLI}.g.vcf.gz \
+#      -ERC GVCF
 
 ls -1 $BASE_DIR/outputs/4_likelihood/*.g.vcf.gz > $BASE_DIR/outputs/lof/4_likelihood.fofn
 
@@ -553,7 +556,7 @@ cat > $jobfile7 <<EOA # generate the job file
 
 
 awk '{print "-V", $1}' $BASE_DIR/outputs/lof/4_likelihood.fofn > $BASE_DIR/outputs/lof/4_likelihood2.fofn
-INPUT_GEN=$(cat $BASE_DIR/outputs/lof/4_likelihood2.fofn)
+INPUT_GEN=\$(cat $BASE_DIR/outputs/lof/4_likelihood2.fofn)
 echo \${INPUT_GEN}
 
 gatk --java-options "-Xmx85g" \
