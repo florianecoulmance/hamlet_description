@@ -508,28 +508,50 @@ cat > $jobfile6 <<EOA # generate the job file
 #SBATCH --ntasks-per-node=1
 #SBATCH --cpus-per-task=1
 #SBATCH --mem-per-cpu=40G
-#SBATCH --time=3-00:00:00
+#SBATCH --time=7-00:00:00
 
 
 INPUT_DUPLI=$BASE_DIR/outputs/lof/3_3_new_duplicates.fofn
-DUPLI=\$(cat \${INPUT_DUPLI} | head -n \${SLURM_ARRAY_TASK_ID} | tail -n 1)
+DUPLI=\$(cat \${INPUT_DUPLI} | head -n 1 | tail -n 1)
 echo \$DUPLI
 
 files="\$(ls -1 $BASE_DIR/outputs/3_duplicates/3_mark/duplicates/*.bam | grep \${DUPLI})"
-echo \${files}
+declare -a arr_file=(\${files})
+echo \${arr_file[*]}
+echo \${arr_file[0]}
+echo "\${#arr_file[@]}"
 
-INPUT=\$(awk '{print "-I", $1, "-I", $2}' \${files})
-echo \${INPUT}
+len="\${#arr_file[@]}"
+echo \${len}
 
-# sample1=\${DUPLI%.*}
-# sample=\${sample1%.*}
-# echo \$sample
+if [[ \${len} == "1" ]]
+then
+  echo \${arr_file[0]}
+  arr_in[0]="-I"
+  arr_in[1]="\${arr_file[0]}"
+  echo \${arr_in[*]}
+  INPUT="\${arr_in[*]}"
+  echo \${INPUT}
 
-# gatk --java-options "-Xmx35g" HaplotypeCaller  \
-#      -R $BASE_DIR/ressources/HP_genome_unmasked_01.fa \
-#      -I $\{INPUT} \
-#      -O $BASE_DIR/outputs/4_likelihood/\${DUPLI}.g.vcf.gz \
-#      -ERC GVCF
+else
+  echo \${arr_file[0]}
+  echo \${arr_file[1]}
+  arr_in[0]="-I"
+  arr_in[1]="\${arr_file[0]}"
+  arr_in[2]="-I"
+  arr_in[3]="\${arr_file[1]}"
+  echo \${arr_in[*]}
+  INPUT="\${arr_in[*]}"
+  echo \${INPUT}
+
+fi
+
+
+gatk --java-options "-Xmx35g" HaplotypeCaller  \
+     -R $BASE_DIR/ressources/HP_genome_unmasked_01.fa \
+     \${INPUT} \
+     -O $BASE_DIR/outputs/4_likelihood/\${DUPLI}.g.vcf.gz \
+     -ERC GVCF
 
 ls -1 $BASE_DIR/outputs/4_likelihood/*.g.vcf.gz > $BASE_DIR/outputs/lof/4_likelihood.fofn
 
@@ -552,19 +574,18 @@ cat > $jobfile7 <<EOA # generate the job file
 #SBATCH --ntasks-per-node=1
 #SBATCH --cpus-per-task=1
 #SBATCH --mem-per-cpu=100G
-#SBATCH --time=4-00:00:00
+#SBATCH --time=6-00:00:00
 
 
-awk '{print "-V", $1}' $BASE_DIR/outputs/lof/4_likelihood.fofn > $BASE_DIR/outputs/lof/4_likelihood2.fofn
+awk '{print "-V", \$1}' $BASE_DIR/outputs/lof/4_likelihood.fofn > $BASE_DIR/outputs/lof/4_likelihood2.fofn
 INPUT_GEN=\$(cat $BASE_DIR/outputs/lof/4_likelihood2.fofn)
 echo \${INPUT_GEN}
 
 gatk --java-options "-Xmx85g" \
       CombineGVCFs \
-      -R=$BASE_DIR/ressources/HP_genome_unmasked_01.fa \
+      -R $BASE_DIR/ressources/HP_genome_unmasked_01.fa \
       \${INPUT_GEN} \
-      -O=$BASE_DIR/outputs/5_cohort/cohort.g.vcf.gz
-
+      -O $BASE_DIR/outputs/5_cohort/cohort.g.vcf.gz
 
 EOA
 
@@ -591,16 +612,16 @@ cat > $jobfile8 <<EOA # generate the job file
 
 gatk --java-options "-Xmx85g" \
      GenotypeGVCFs \
-     -R=$BASE_DIR/ressources/HP_genome_unmasked_01.fa \
-     -V=$BASE_DIR/outputs/5_cohort/cohort.g.vcf.gz \
-     -O=$BASE_DIR/6_genotyping/6_1_snp/intermediate.vcf.gz
+     -R $BASE_DIR/ressources/HP_genome_unmasked_01.fa \
+     -V $BASE_DIR/outputs/5_cohort/cohort.g.vcf.gz \
+     -O $BASE_DIR/6_genotyping/6_1_snp/intermediate.vcf.gz
 
 gatk --java-options "-Xmx85G" \
      SelectVariants \
-     -R=$BASE_DIR/ressources/HP_genome_unmasked_01.fa \
-     -V=$BASE_DIR/6_genotyping/6_1_snp/intermediate.vcf.gz \
+     -R $BASE_DIR/ressources/HP_genome_unmasked_01.fa \
+     -V $BASE_DIR/6_genotyping/6_1_snp/intermediate.vcf.gz \
      --select-type-to-include=SNP \
-     -O=$BASE_DIR/outputs/6_genotyping/6_1_snp/raw_var_sites.vcf.gz
+     -O $BASE_DIR/outputs/6_genotyping/6_1_snp/raw_var_sites.vcf.gz
 
 rm $BASE_DIR/6_genotyping/6_1_snp/intermediate.*
 
@@ -628,10 +649,10 @@ cat > $jobfile9 <<EOA # generate the job file
 
 gatk --java-options "-Xmx25G" \
        VariantsToTable \
-       --variant=$BASE_DIR/outputs/6_genotyping/6_1_snp/raw_var_sites.vcf.gz \
-       --output=$BASE_DIR/outputs/6_genotyping/6_1_snp/raw_var_sites.table.txt \
-       -F=CHROM -F=POS -F=MQ \
-       -F=QD -F=FS -F=MQRankSum -F=ReadPosRankSum \
+       --variant $BASE_DIR/outputs/6_genotyping/6_1_snp/raw_var_sites.vcf.gz \
+       --output $BASE_DIR/outputs/6_genotyping/6_1_snp/raw_var_sites.table.txt \
+       -F CHROM -F POS -F MQ \
+       -F QD -F FS -F MQRankSum -F ReadPosRankSum \
        --show-filtered
 
 Rscript --vanilla $BASE_DIR/R/filtering_thresholds.R $BASE_DIR/outputs/6_genotyping/6_1_snp/raw_var_sites.table.txt $BASE_DIR/figures/
@@ -660,9 +681,9 @@ cat > $jobfile10 <<EOA # generate the job file
 
 gatk --java-options "-Xmx75G" \
        VariantFiltration \
-       -R=$BASE_DIR/ressources/HP_genome_unmasked_01.fa \
-       -V=$BASE_DIR/outputs/6_genotyping/6_1_snp/raw_var_sites.vcf.gz \
-       -O=$BASE_DIR/outputs/6_genotyping/6_1_snp/intermediate.vcf.gz \
+       -R $BASE_DIR/ressources/HP_genome_unmasked_01.fa \
+       -V $BASE_DIR/outputs/6_genotyping/6_1_snp/raw_var_sites.vcf.gz \
+       -O $BASE_DIR/outputs/6_genotyping/6_1_snp/intermediate.vcf.gz \
        --filter-expression "QD < 4.0" \
        --filter-name "filter_QD" \
        --filter-expression "FS > 60.0" \
@@ -676,9 +697,9 @@ gatk --java-options "-Xmx75G" \
 
 gatk --java-options "-Xmx75G" \
        SelectVariants \
-       -R=$BASE_DIR/ressources/HP_genome_unmasked_01.fa \
-       -V=$BASE_DIR/outputs/6_genotyping/6_1_snp/intermediate.vcf.gz \
-       -O=$BASE_DIR/outputs/6_genotyping/6_1_snp/intermediate.filterd.vcf.gz \
+       -R $BASE_DIR/ressources/HP_genome_unmasked_01.fa \
+       -V $BASE_DIR/outputs/6_genotyping/6_1_snp/intermediate.vcf.gz \
+       -O $BASE_DIR/outputs/6_genotyping/6_1_snp/intermediate.filterd.vcf.gz \
        --exclude-filtered
 
 vcftools \
@@ -721,18 +742,18 @@ cat > $jobfile11 <<EOA # generate the job file
 
 gatk --java-options "-Xmx85g" \
     GenotypeGVCFs \
-    -R=$BASE_DIR/ressources/HP_genome_unmasked_01.fa \
-    -L=LG${SLURM_ARRAY_TASK_ID} \
-    -V=$BASE_DIR/outputs/5_cohort/cohort.g.vcf.gz  \
-    -O=$BASE_DIR/6_genotyping/6_2_all/intermediate.vcf.gz \
+    -R $BASE_DIR/ressources/HP_genome_unmasked_01.fa \
+    -L LG\${SLURM_ARRAY_TASK_ID} \
+    -V $BASE_DIR/outputs/5_cohort/cohort.g.vcf.gz  \
+    -O $BASE_DIR/6_genotyping/6_2_all/intermediate.vcf.gz \
     --include-non-variant-sites=true
 
 gatk --java-options "-Xmx85G" \
     SelectVariants \
-    -R=$BASE_DIR/ressources/HP_genome_unmasked_01.fa \
-    -V=$BASE_DIR/6_genotyping/6_2_all/intermediate.vcf.gz \
+    -R $BASE_DIR/ressources/HP_genome_unmasked_01.fa \
+    -V $BASE_DIR/6_genotyping/6_2_all/intermediate.vcf.gz \
     --select-type-to-exclude=INDEL \
-    -O=$BASE_DIR/6_genotyping/6_2_all/all_sites.LG${SLURM_ARRAY_TASK_ID}.vcf.gz
+    -O $BASE_DIR/6_genotyping/6_2_all/all_sites.LG${SLURM_ARRAY_TASK_ID}.vcf.gz
 
 rm $BASE_DIR/6_genotyping/6_2_all/intermediate.*
 
@@ -758,16 +779,16 @@ cat > $jobfile12 <<EOA # generate the job file
 #SBATCH --time=3-00:00:00
 
 
-ls -1 $BASE_DIR/outputs/6_genotyping/6_2_all/all_sites.* > $BASE_DIR/outputs/lof/14_all.fofn
-awk '{print "-I", $1}' $BASE_DIR/outputs/lof/14_all.fofn > $BASE_DIR/outputs/lof/14_all2.fofn
+ls -1 $BASE_DIR/outputs/6_genotyping/6_2_all/all_sites.*.gz > $BASE_DIR/outputs/lof/14_all.fofn
+awk '{print "-I", \$1}' $BASE_DIR/outputs/lof/14_all.fofn > $BASE_DIR/outputs/lof/14_all2.fofn
 
-INPUT_GEN=$(cat $BASE_DIR/outputs/lof/14_all2.fofn)
+INPUT_GEN=\$(cat $BASE_DIR/outputs/lof/14_all2.fofn)
 echo \${INPUT_GEN}
 
 gatk --java-options "-Xmx85g" \
        GatherVcfs \
        \${INPUT_GEN} \
-       -O=$BASE_DIR/outputs/6_genotyping/6_2_all/all_sites.vcf.gz
+       -O $BASE_DIR/outputs/6_genotyping/6_2_all/all_sites.vcf.gz
 
 
 EOA
@@ -795,9 +816,9 @@ tabix -p vcf $BASE_DIR/outputs/6_genotyping/6_2_all/all_sites.vcf.gz
 
 gatk --java-options "-Xmx75G" \
        VariantFiltration \
-       -R=$BASE_DIR/ressources/HP_genome_unmasked_01.fa \
-       -V=$BASE_DIR/outputs/6_genotyping/6_2_all/all_sites.vcf.gz \
-       -O=$BASE_DIR/outputs/6_genotyping/6_2_all/intermediate.vcf.gz \
+       -R $BASE_DIR/ressources/HP_genome_unmasked_01.fa \
+       -V $BASE_DIR/outputs/6_genotyping/6_2_all/all_sites.vcf.gz \
+       -O $BASE_DIR/outputs/6_genotyping/6_2_all/intermediate.vcf.gz \
        --filter-expression "QD < 4.0" \
        --filter-name "filter_QD" \
        --filter-expression "FS > 60.0" \
@@ -812,9 +833,9 @@ gatk --java-options "-Xmx75G" \
 
 gatk --java-options "-Xmx75G" \
        SelectVariants \
-       -R=$BASE_DIR/ressources/HP_genome_unmasked_01.fa \
-       -V=$BASE_DIR/outputs/6_genotyping/6_2_all/intermediate.vcf.gz \
-       -O=$BASE_DIR/outputs/6_genotyping/6_2_all/intermediate.filterd.vcf.gz \
+       -R $BASE_DIR/ressources/HP_genome_unmasked_01.fa \
+       -V $BASE_DIR/outputs/6_genotyping/6_2_all/intermediate.vcf.gz \
+       -O $BASE_DIR/outputs/6_genotyping/6_2_all/intermediate.filterd.vcf.gz \
        --exclude-filtered \
        --QUIET true \
        --verbosity ERROR  &> var_select.log
