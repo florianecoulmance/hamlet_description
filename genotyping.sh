@@ -730,7 +730,7 @@ cat > $jobfile11 <<EOA # generate the job file
 #!/bin/bash
 #SBATCH --job-name=11_all
 #SBATCH --partition=carl.p
-#SBATCH --array=1-24
+#SBATCH --array=0-23
 #SBATCH --output=$BASE_DIR/logs/11_all_%A_%a.out
 #SBATCH --error=$BASE_DIR/logs/11_all_%A_%a.err
 #SBATCH --nodes=1
@@ -739,21 +739,25 @@ cat > $jobfile11 <<EOA # generate the job file
 #SBATCH --mem-per-cpu=90G
 #SBATCH --time=4-00:00:00
 
+list=(01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24)
+echo \${list[*]}
+NB=\${list[\${SLURM_ARRAY_TASK_ID}]}
+echo \${NB}
 
 gatk --java-options "-Xmx85g" \
     GenotypeGVCFs \
     -R $BASE_DIR/ressources/HP_genome_unmasked_01.fa \
-    -L LG\${SLURM_ARRAY_TASK_ID} \
+    -L LG\${NB} \
     -V $BASE_DIR/outputs/5_cohort/cohort.g.vcf.gz  \
-    -O $BASE_DIR/6_genotyping/6_2_all/intermediate.vcf.gz \
+    -O $BASE_DIR/6_genotyping/6_2_all/intermediate.LG\${NB}.vcf.gz \
     --include-non-variant-sites=true
 
 gatk --java-options "-Xmx85G" \
     SelectVariants \
     -R $BASE_DIR/ressources/HP_genome_unmasked_01.fa \
-    -V $BASE_DIR/6_genotyping/6_2_all/intermediate.vcf.gz \
+    -V $BASE_DIR/6_genotyping/6_2_all/intermediate.LG\${NB}.vcf.gz \
     --select-type-to-exclude=INDEL \
-    -O $BASE_DIR/6_genotyping/6_2_all/all_sites.LG${SLURM_ARRAY_TASK_ID}.vcf.gz
+    -O $BASE_DIR/6_genotyping/6_2_all/all_sites.LG\${NB}.vcf.gz
 
 rm $BASE_DIR/6_genotyping/6_2_all/intermediate.*
 
