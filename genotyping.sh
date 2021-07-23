@@ -614,16 +614,16 @@ gatk --java-options "-Xmx85g" \
      GenotypeGVCFs \
      -R $BASE_DIR/ressources/HP_genome_unmasked_01.fa \
      -V $BASE_DIR/outputs/5_cohort/cohort.g.vcf.gz \
-     -O $BASE_DIR/6_genotyping/6_1_snp/intermediate.vcf.gz
+     -O $BASE_DIR/outputs/6_genotyping/6_1_snp/intermediate.vcf.gz
 
 gatk --java-options "-Xmx85G" \
      SelectVariants \
      -R $BASE_DIR/ressources/HP_genome_unmasked_01.fa \
-     -V $BASE_DIR/6_genotyping/6_1_snp/intermediate.vcf.gz \
+     -V $BASE_DIR/outputs/6_genotyping/6_1_snp/intermediate.vcf.gz \
      --select-type-to-include=SNP \
      -O $BASE_DIR/outputs/6_genotyping/6_1_snp/raw_var_sites.vcf.gz
 
-rm $BASE_DIR/6_genotyping/6_1_snp/intermediate.*
+#rm $BASE_DIR/outputs/6_genotyping/6_1_snp/intermediate.*
 
 
 EOA
@@ -646,6 +646,10 @@ cat > $jobfile9 <<EOA # generate the job file
 #SBATCH --mem-per-cpu=30G
 #SBATCH --time=06:00:00
 
+ml hpc-env/8.3
+ml R/4.0.2-foss-2019b
+ml FriBidi
+ml HarfBuzz
 
 gatk --java-options "-Xmx25G" \
        VariantsToTable \
@@ -712,7 +716,7 @@ vcftools \
 
 tabix -p vcf $BASE_DIR/outputs/6_genotyping/6_1_snp/filterd_bi-allelic.vcf.gz
 
-rm $BASE_DIR/outputs/6_genotyping/6_1_snp/intermediate.*
+#rm $BASE_DIR/outputs/6_genotyping/6_1_snp/intermediate.*
 
 echo -e "$BASE_DIR/outputs/6_genotyping/6_1_snp/filterd_bi-allelic.vcf.gz" > $BASE_DIR/outputs/lof/snp_all.fofn
 
@@ -759,7 +763,7 @@ gatk --java-options "-Xmx85G" \
     --select-type-to-exclude=INDEL \
     -O $BASE_DIR/6_genotyping/6_2_all/all_sites.LG\${NB}.vcf.gz
 
-rm $BASE_DIR/6_genotyping/6_2_all/intermediate.*
+#rm $BASE_DIR/6_genotyping/6_2_all/intermediate.*
 
 
 EOA
@@ -851,7 +855,7 @@ vcftools \
        --recode | \
        bgzip > $BASE_DIR/outputs/6_genotyping/6_2_all/filterd.allBP.vcf.gz
 
-rm $BASE_DIR/outputs/6_genotyping/6_2_all/intermediate.*
+#rm $BASE_DIR/outputs/6_genotyping/6_2_all/intermediate.*
 
 echo -e "\n$BASE_DIR/outputs/6_genotyping/6_1_snp/filterd.allBP.vcf.gz" >> $BASE_DIR/outputs/lof/snp_all.fofn
 
@@ -951,8 +955,10 @@ echo \$FILE
 echo \$VCF
 echo \$PREFIX
 
-module load  hpc-env/8.3
-module load R/4.0.2-foss-2019b
+ml hpc-env/8.3
+ml R/4.0.2-foss-2019b
+ml FriBidi
+ml HarfBuzz
 
 Rscript --vanilla $BASE_DIR/R/pca.R \${PCA} $BASE_DIR/pca/ \${PREFIX}
 
