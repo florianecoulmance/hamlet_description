@@ -874,7 +874,7 @@ cat > $jobfile14 <<EOA # generate the job file
 #!/usr/bin/env bash
 #SBATCH --job-name=14_changes
 #SBATCH --partition=carl.p
-#SBATCH --array=1-2
+#SBATCH --array=1
 #SBATCH --output=$BASE_DIR/logs/14_changes_%A_%a.out
 #SBATCH --error=$BASE_DIR/logs/14_changes_%A_%a.err
 #SBATCH --nodes=1
@@ -935,7 +935,7 @@ cat > $jobfiled <<EOA # generate the job file
 #!/bin/bash
 #SBATCH --job-name=d_pca
 #SBATCH --partition=carl.p
-#SBATCH --array=1-4
+#SBATCH --array=1-2
 #SBATCH --output=$BASE_DIR/logs/d_pca_%A_%a.out
 #SBATCH --error=$BASE_DIR/logs/d_pca_%A_%a.err
 #SBATCH --nodes=1
@@ -944,23 +944,26 @@ cat > $jobfiled <<EOA # generate the job file
 #SBATCH --mem-per-cpu=10G
 #SBATCH --time=1-02:00:00
 
-
-INPUT_PCA=$BASE_DIR/outputs/lof/17_pca.fofn
-PCA=\$(cat \${INPUT_PCA} | head -n \${SLURM_ARRAY_TASK_ID} | tail -n 1)
-FILE=\${*/%PCA}
-VCF=\${FILE%.*}
-PREFIX=\${VCF%.*}
-echo \$PCA
-echo \$FILE
-echo \$VCF
-echo \$PREFIX
-
 ml hpc-env/8.3
 ml R/4.0.2-foss-2019b
 ml FriBidi
 ml HarfBuzz
 
-Rscript --vanilla $BASE_DIR/R/pca.R \${PCA} $BASE_DIR/pca/ \${PREFIX}
+INPUT_PCA=$BASE_DIR/outputs/lof/17_pca.fofn
+
+PCA=\$(cat \${INPUT_PCA} | head -n \${SLURM_ARRAY_TASK_ID} | tail -n 1)
+
+if [[ "\${SLURM_ARRAY_TASK_ID}" == "1" ]]
+then
+  PREFIX="snp"
+else
+  PREFIX="snp_casz1"
+fi
+
+echo \${PREFIX}
+
+
+Rscript --vanilla $BASE_DIR/R/pca.R \${PCA} $BASE_DIR/figures/ \${PREFIX}
 
 
 EOA
