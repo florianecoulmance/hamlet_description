@@ -83,7 +83,7 @@ p1 <- p1 + scale_color_manual(values=spec_colors,
 
 
 p2 <- ggplot(data,aes(x=X1,y=X2,color=spec)) + geom_point(size = 3) + 
-      labs(x = paste0("PC1, var =  ", format(round(variance$X0[1], 1), nsmall = 1), " %") , y = paste0("PC2, var = ", format(round(variance$X0[2], 1), nsmall = 1), " %"))
+      labs(x = paste0("PC1, var =  ", format(round(variance$variation[1], 1), nsmall = 1), " %") , y = paste0("PC2, var = ", format(round(variance$variation[2], 1), nsmall = 1), " %"))
 p2 <- p2 + scale_color_manual(values=spec_colors,
                               labels = logos_spec) +
   theme(legend.position="bottom",legend.title=element_blank(),legend.box = "vertical",legend.text =  element_markdown(size = 20),
@@ -93,7 +93,7 @@ p2 <- p2 + scale_color_manual(values=spec_colors,
 
 
 p3 <- ggplot(data,aes(x=X1,y=X3,color=spec)) + geom_point(size = 3) + 
-      labs(x = paste0("PC1, var =  ", format(round(variance$X0[1], 1), nsmall = 1), " %") , y = paste0("PC3, var = ", format(round(variance$X0[3], 1), nsmall = 1), " %"))
+      labs(x = paste0("PC1, var =  ", format(round(variance$variation[1], 1), nsmall = 1), " %") , y = paste0("PC3, var = ", format(round(variance$variation[3], 1), nsmall = 1), " %"))
 p3 <- p3 + scale_color_manual(values=spec_colors,
                               labels = logos_spec) +
   theme(legend.position="bottom",legend.title=element_blank(),legend.box = "vertical",legend.text =  element_markdown(size = 20),
@@ -103,7 +103,7 @@ p3 <- p3 + scale_color_manual(values=spec_colors,
 
 
 p4 <- ggplot(data,aes(x=X2,y=X3,color=spec)) + geom_point(size = 3) +
-      labs(x = paste0("PC2, var =  ", format(round(variance$X0[1], 1), nsmall = 1), " %") , y = paste0("PC3, var = ", format(round(variance$X0[2], 1), nsmall = 1), " %"))
+      labs(x = paste0("PC2, var =  ", format(round(variance$variation[2], 1), nsmall = 1), " %") , y = paste0("PC3, var = ", format(round(variance$variation[3], 1), nsmall = 1), " %"))
 p4 <- p4 + scale_color_manual(values=spec_colors,
                               labels = logos_spec) +
   theme(legend.position="bottom",legend.title=element_blank(),legend.box = "vertical",legend.text =  element_markdown(size = 20),
@@ -141,5 +141,5 @@ hypo_save(filename = paste0(figure_path,out_prefix,"_no_floridae_PC2-3.pdf"),
 
 hypo_save(filename = paste0(figure_path,out_prefix,"_no_floridae.pdf"),
           plot = f,
-          width = 15,
+          width = 30,
           height = 10)
