@@ -955,17 +955,19 @@ PCA=\$(cat \${INPUT_PCA} | head -n \${SLURM_ARRAY_TASK_ID} | tail -n 1)
 
 if [[ "\${SLURM_ARRAY_TASK_ID}" == "1" ]]
 then
-  PREFIX="snp"
+  PREFIX="snp_nofloridae"
 else
-  PREFIX="snp_casz1"
+  PREFIX="snp_casz1_nofloridae"
 fi
 
 echo \${PREFIX}
 
+bcftools view -S $BASE_DIR/metadata/sample_list.txt  -o $BASE_DIR/outputs/6_genotyping/6_1_snp/\${PREFIX}_nofloridae.vcf.gz \${PCA}
+tabix -p vcf $BASE_DIR/outputs/6_genotyping/6_1_snp/\${PREFIX}_nofloridae.vcf.gz
 
-#Rscript --vanilla $BASE_DIR/R/pca.R \${PCA} $BASE_DIR/figures/ \${PREFIX}
-Rscript $BASE_DIR/R/pca_plots.R $BASE_DIR/figures/snp_pca.RData $BASE_DIR/figures/ snp_pca
-Rscript $BASE_DIR/R/pca_plots.R $BASE_DIR/figures/snp_casz1_pca.RData $BASE_DIR/figures/ snp_casz1_pca
+Rscript --vanilla $BASE_DIR/R/pca.R $BASE_DIR/outputs/6_genotyping/6_1_snp/\${PREFIX}_nofloridae.vcf.gz $BASE_DIR/figures/ \${PREFIX}
+#Rscript $BASE_DIR/R/pca_plots.R $BASE_DIR/figures/snp_nofloridae_pca.RData $BASE_DIR/figures/snp_nofloridae__eixplained_var.tsv $BASE_DIR/figures/ snp_nofloridae_pca
+#Rscript $BASE_DIR/R/pca_plots.R $BASE_DIR/figures/snp_casz1_nofloridae_pca.RData $BASE_DIR/figures/snp_casz1_nofloridae__eixplained_var.tsv $BASE_DIR/figures/ snp_casz1_nofloridae_pca
 
 
 EOA

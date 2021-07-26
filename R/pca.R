@@ -37,16 +37,19 @@ out_prefix <- as.character(args[3])
 
 
 # Read the files and convert to pca format
-ld_threshold <- 1
+ld_threshold <- 0.25
 gds_file <- str_c(output_path,out_prefix,".gds")
 snpgdsVCF2GDS(vcf.fn=vcf_file, out.fn=gds_file, method="biallelic.only")
+
 genofile <- snpgdsOpen(gds_file)
-snpset <- snpgdsLDpruning(genofile, ld.threshold = ld_threshold, autosome.only = FALSE)
+
+snpset <- snpgdsLDpruning(genofile, ld.threshold = ld_threshold, method = "corr", maf >= 0.02, autosome.only = FALSE)
 snpset.id <- unlist(snpset)
 
 
 # perfor pca
 pca <- snpgdsPCA(genofile, snp.id = snpset.id, num.thread = 2, autosome.only = FALSE)
+print(pca)
 
 pca_tib <- pca$eigenvect %>%
   as_tibble() %>%
