@@ -70,8 +70,8 @@ data["spec"] <- stri_sub(data$id,-6,-4)
 p1 <- ggplot(data,aes(x=X1,y=X2,color=spec)) + geom_point(aes(shape=geo)) + xlab("PC01") + ylab("PC02")
 p1 <- p1 + scale_color_manual(values=spec_colors,
                             labels = logos_spec) +
-  #scale_shape_manual(values = c(16,17,15,3),
-   #                         labels = logos_loc) +
+  scale_shape_manual(values = c(16,17,15,3),
+                            labels = logos_loc) +
   theme(legend.position="bottom",legend.title=element_blank(),legend.box = "vertical",legend.text =  element_markdown(size = 6)) +
   guides(color = guide_legend(nrow = 1))
 
