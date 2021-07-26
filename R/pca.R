@@ -43,7 +43,7 @@ snpgdsVCF2GDS(vcf.fn=vcf_file, out.fn=gds_file, method="biallelic.only")
 
 genofile <- snpgdsOpen(gds_file)
 
-snpset <- snpgdsLDpruning(genofile, ld.threshold = ld_threshold, method = "corr", maf >= 0.02, autosome.only = FALSE)
+snpset <- snpgdsLDpruning(genofile, ld.threshold = ld_threshold, method = "corr", maf=0.02, autosome.only = FALSE)
 snpset.id <- unlist(snpset)
 
 
