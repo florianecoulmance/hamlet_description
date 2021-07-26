@@ -964,7 +964,7 @@ echo \${PREFIX}
 
 
 #Rscript --vanilla $BASE_DIR/R/pca.R \${PCA} $BASE_DIR/figures/ \${PREFIX}
-Rscript $BASE_DIR/R/pca_plots.R $BASE_DIR/figures/snp_pca $BASE_DIR/figures/ snp_pca
+Rscript $BASE_DIR/R/pca_plots.R $BASE_DIR/figures/snp_pca.RData $BASE_DIR/figures/ snp_pca
 Rscript $BASE_DIR/R/pca_plots.R $BASE_DIR/figures/snp_casz1_pca.RData $BASE_DIR/figures/ snp_casz1_pca
 
 
