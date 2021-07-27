@@ -3,6 +3,7 @@ logs/*
 outputs/*
 output/*
 ressources/*
+figures/*gds
 annotations/*
 temp_files/*
 data/*
