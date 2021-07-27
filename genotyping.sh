@@ -965,7 +965,7 @@ echo \${PREFIX}
 #bcftools view -S $BASE_DIR/metadata/sample_list.txt  -o $BASE_DIR/outputs/6_genotyping/6_1_snp/\${PREFIX}.vcf.gz \${PCA}
 #tabix -p vcf $BASE_DIR/outputs/6_genotyping/6_1_snp/\${PREFIX}.vcf.gz
 
-Rscript --vanilla $BASE_DIR/R/pca.R $BASE_DIR/outputs/6_genotyping/6_1_snp/\${PREFIX}.vcf.gz $BASE_DIR/figures/ \${PREFIX}_0.1_nomaf
+Rscript --vanilla $BASE_DIR/R/pca.R $BASE_DIR/outputs/6_genotyping/6_1_snp/\${PREFIX}.vcf.gz $BASE_DIR/figures/ \${PREFIX}_0.5_maf0.02
 #Rscript $BASE_DIR/R/pca_plots.R $BASE_DIR/figures/snp_nofloridae_pca.RData $BASE_DIR/figures/snp_nofloridae__eixplained_var.tsv $BASE_DIR/figures/ snp_nofloridae_pca
 #Rscript $BASE_DIR/R/pca_plots.R $BASE_DIR/figures/snp_casz1_nofloridae_pca.RData $BASE_DIR/figures/snp_casz1_nofloridae__eixplained_var.tsv $BASE_DIR/figures/ snp_casz1_nofloridae_pca
 
