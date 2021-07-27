@@ -40,19 +40,19 @@ out_prefix <- as.character(args[4])
 # -------------------------------------------------------------------------------------------------------------------
 # ANALYSIS
 
-logos_spec <- c(abe = "<img src='/Users/fco/Desktop/PhD/1_CHAPTER1/0_IMAGES/after_python/logos/H_aberrans.l.cairo.png' width='90' /><br>*H. aberrans*",
-  chl = "<img src='/Users/fco/Desktop/PhD/1_CHAPTER1/0_IMAGES/after_python/logos/H_chlorurus.l.cairo.png' width='90' /><br>*H. chlorurus*",
-  flo = "<img src='/Users/fco/Desktop/PhD/1_CHAPTER1/0_IMAGES/after_python/logos/H_floridae.l.cairo.png' width='90' /><br>*H. floridae*",
-  gem = "<img src='/Users/fco/Desktop/PhD/1_CHAPTER1/0_IMAGES/after_python/logos/H_gemma.l.cairo.png' width='90' /><br>*H. gemma*",
-  gum = "<img src='/Users/fco/Desktop/PhD/1_CHAPTER1/0_IMAGES/after_python/logos/H_gumigutta.l.cairo.png' width='90' /><br>*H. gummiguta*",
-  gut = "<img src='/Users/fco/Desktop/PhD/1_CHAPTER1/0_IMAGES/after_python/logos/H_guttavarius.l.cairo.png' width='90' /><br>*H. guttavarius*",
-  ind = "<img src='/Users/fco/Desktop/PhD/1_CHAPTER1/0_IMAGES/after_python/logos/H_indigo.l.cairo.png' width='90' /><br>*H. indigo*",
-  may = "<img src='/Users/fco/Desktop/PhD/1_CHAPTER1/0_IMAGES/after_python/logos/H_maya.l.cairo.png' width='90' /><br>*H. maya*",
-  nig = "<img src='/Users/fco/Desktop/PhD/1_CHAPTER1/0_IMAGES/after_python/logos/H_nigricans.l.cairo.png' width='90' /><br>*H. nigricans*",
-  pue = "<img src='/Users/fco/Desktop/PhD/1_CHAPTER1/0_IMAGES/after_python/logos/H_puella.l.cairo.png' width='90' /><br>*H. puella*",
-  ran = "<img src='/Users/fco/Desktop/PhD/1_CHAPTER1/0_IMAGES/after_python/logos/H_randallorum.l.cairo.png' width='90' /><br>*H. randallorum*",
-  tan = "<img src='/Users/fco/Desktop/PhD/1_CHAPTER1/0_IMAGES/after_python/logos/H_tan.l.cairo.png' width='90' /><br>*H. affinis*",
-  uni = "<img src='/Users/fco/Desktop/PhD/1_CHAPTER1/0_IMAGES/after_python/logos/H_unicolor.l.cairo.png' width='90' /><br>*H. unicolor*")
+logos_spec <- c(abe = "<img src='/Users/fco/Desktop/PhD/1_CHAPTER1/0_IMAGES/after_python/logos/H_aberrans.l.cairo.png' width='150' /><br>*H. aberrans*",
+  chl = "<img src='/Users/fco/Desktop/PhD/1_CHAPTER1/0_IMAGES/after_python/logos/H_chlorurus.l.cairo.png' width='150' /><br>*H. chlorurus*",
+  flo = "<img src='/Users/fco/Desktop/PhD/1_CHAPTER1/0_IMAGES/after_python/logos/H_floridae.l.cairo.png' width='150' /><br>*H. floridae*",
+  gem = "<img src='/Users/fco/Desktop/PhD/1_CHAPTER1/0_IMAGES/after_python/logos/H_gemma.l.cairo.png' width='150' /><br>*H. gemma*",
+  gum = "<img src='/Users/fco/Desktop/PhD/1_CHAPTER1/0_IMAGES/after_python/logos/H_gumigutta.l.cairo.png' width='150' /><br>*H. gummiguta*",
+  gut = "<img src='/Users/fco/Desktop/PhD/1_CHAPTER1/0_IMAGES/after_python/logos/H_guttavarius.l.cairo.png' width='150' /><br>*H. guttavarius*",
+  ind = "<img src='/Users/fco/Desktop/PhD/1_CHAPTER1/0_IMAGES/after_python/logos/H_indigo.l.cairo.png' width='150' /><br>*H. indigo*",
+  may = "<img src='/Users/fco/Desktop/PhD/1_CHAPTER1/0_IMAGES/after_python/logos/H_maya.l.cairo.png' width='150' /><br>*H. maya*",
+  nig = "<img src='/Users/fco/Desktop/PhD/1_CHAPTER1/0_IMAGES/after_python/logos/H_nigricans.l.cairo.png' width='150' /><br>*H. nigricans*",
+  pue = "<img src='/Users/fco/Desktop/PhD/1_CHAPTER1/0_IMAGES/after_python/logos/H_puella.l.cairo.png' width='150' /><br>*H. puella*",
+  ran = "<img src='/Users/fco/Desktop/PhD/1_CHAPTER1/0_IMAGES/after_python/logos/H_randallorum.l.cairo.png' width='150' /><br>*H. randallorum*",
+  tan = "<img src='/Users/fco/Desktop/PhD/1_CHAPTER1/0_IMAGES/after_python/logos/H_tan.l.cairo.png' width='150' /><br>*H. affinis*",
+  uni = "<img src='/Users/fco/Desktop/PhD/1_CHAPTER1/0_IMAGES/after_python/logos/H_unicolor.l.cairo.png' width='150' /><br>*H. unicolor*")
 
 logos_loc <- c(bel = "<img src='/Users/fco/Desktop/PhD/1_CHAPTER1/0_IMAGES/after_python/logos/belize.png' width='30' /><br>Belize",
                boc = "<img src='/Users/fco/Desktop/PhD/1_CHAPTER1/0_IMAGES/after_python/logos/pan.png' width='30' /><br>Panama",
@@ -82,31 +82,31 @@ p1 <- p1 + scale_color_manual(values=spec_colors,
   guides(color = guide_legend(nrow = 1))
 
 
-p2 <- ggplot(data,aes(x=X1,y=X2,color=spec)) + geom_point(size = 3) + 
+p2 <- ggplot(data,aes(x=X1,y=X2,color=spec)) + geom_point(size = 8) + 
       labs(x = paste0("PC1, var =  ", format(round(variance$variation[1], 1), nsmall = 1), " %") , y = paste0("PC2, var = ", format(round(variance$variation[2], 1), nsmall = 1), " %"))
 p2 <- p2 + scale_color_manual(values=spec_colors,
                               labels = logos_spec) +
-  theme(legend.position="bottom",legend.title=element_blank(),legend.box = "vertical",legend.text =  element_markdown(size = 20),
+  theme(legend.position="bottom",legend.title=element_blank(),legend.box = "vertical",legend.text =  element_markdown(size = 30),
         panel.background = element_blank(), panel.border = element_rect(colour = "black", fill=NA, size=1),
         text = element_text(size=30), legend.key=element_blank()) +
   guides(color = guide_legend(nrow = 1))
 
 
-p3 <- ggplot(data,aes(x=X1,y=X3,color=spec)) + geom_point(size = 3) + 
+p3 <- ggplot(data,aes(x=X1,y=X3,color=spec)) + geom_point(size = 8) + 
       labs(x = paste0("PC1, var =  ", format(round(variance$variation[1], 1), nsmall = 1), " %") , y = paste0("PC3, var = ", format(round(variance$variation[3], 1), nsmall = 1), " %"))
 p3 <- p3 + scale_color_manual(values=spec_colors,
                               labels = logos_spec) +
-  theme(legend.position="bottom",legend.title=element_blank(),legend.box = "vertical",legend.text =  element_markdown(size = 20),
+  theme(legend.position="bottom",legend.title=element_blank(),legend.box = "vertical",legend.text =  element_markdown(size = 30),
         panel.background = element_blank(), panel.border = element_rect(colour = "black", fill=NA, size=1),
         text = element_text(size=30), legend.key=element_blank()) +
   guides(color = guide_legend(nrow = 1))
 
 
-p4 <- ggplot(data,aes(x=X2,y=X3,color=spec)) + geom_point(size = 3) +
+p4 <- ggplot(data,aes(x=X2,y=X3,color=spec)) + geom_point(size = 8) +
       labs(x = paste0("PC2, var =  ", format(round(variance$variation[2], 1), nsmall = 1), " %") , y = paste0("PC3, var = ", format(round(variance$variation[3], 1), nsmall = 1), " %"))
 p4 <- p4 + scale_color_manual(values=spec_colors,
                               labels = logos_spec) +
-  theme(legend.position="bottom",legend.title=element_blank(),legend.box = "vertical",legend.text =  element_markdown(size = 20),
+  theme(legend.position="bottom",legend.title=element_blank(),legend.box = "vertical",legend.text =  element_markdown(size = 30),
         panel.background = element_blank(), panel.border = element_rect(colour = "black", fill=NA, size=1),
         text = element_text(size=30), legend.key=element_blank()) +
   guides(color = guide_legend(nrow = 1))
@@ -119,27 +119,27 @@ p4 <- p4 + scale_color_manual(values=spec_colors,
 
 f <- ggarrange(p2, p3, p4, common.legend = TRUE, legend="bottom",ncol = 3, nrow = 1, labels = c("A", "B", "C"))
 
-hypo_save(filename = paste0(figure_path,out_prefix,".pdf"),
-          plot = p1,
-          width = 10,
-          height = 10)
+# hypo_save(filename = paste0(figure_path,out_prefix,"_kosmas.pdf"),
+#           plot = p1,
+#           width = 10,
+#           height = 10)
+# 
+# hypo_save(filename = paste0(figure_path,out_prefix,"_no_floridae_kosmas_PC1-2.pdf"),
+#           plot = p2,
+#           width = 15,
+#           height = 10)
+# 
+# hypo_save(filename = paste0(figure_path,out_prefix,"_no_floridae_kosmas_PC1-3.pdf"),
+#           plot = p3,
+#           width = 15,
+#           height = 10)
+# 
+# hypo_save(filename = paste0(figure_path,out_prefix,"_no_floridae_kosmas_PC2-3.pdf"),
+#           plot = p4,
+#           width = 15,
+#           height = 10)
 
-hypo_save(filename = paste0(figure_path,out_prefix,"_no_floridae_PC1-2.pdf"),
-          plot = p2,
-          width = 15,
-          height = 10)
-
-hypo_save(filename = paste0(figure_path,out_prefix,"_no_floridae_PC1-3.pdf"),
-          plot = p3,
-          width = 15,
-          height = 10)
-
-hypo_save(filename = paste0(figure_path,out_prefix,"_no_floridae_PC2-3.pdf"),
-          plot = p4,
-          width = 15,
-          height = 10)
-
-hypo_save(filename = paste0(figure_path,out_prefix,"_no_floridae.pdf"),
+hypo_save(filename = paste0(figure_path,out_prefix,"_no_floridae_0.5_nomaf.pdf"),
           plot = f,
           width = 30,
           height = 10)
