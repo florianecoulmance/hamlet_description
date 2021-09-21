@@ -1,7 +1,7 @@
 #!/bin/bash
 # by: Floriane Coulmance: 02/07/2021
 # usage:
-# gxp.sh -i <PATH> -j <JOB_ID>
+# genotyping.sh -i <PATH> -j <JOB_ID>
 # ------------------------------------------------------------------------------
 # PATH corresponds to the path to the base directory, all outputs and necessary
 # folder will be created by the script
