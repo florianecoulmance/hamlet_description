@@ -121,3 +121,26 @@ cat > $jobfile1 <<EOA # generate the job file
 
 
 EOA
+
+
+
+# ********** Schedule the job launching ***********
+# -------------------------------------------------
+
+if [ "$JID_RES" = "jid1" ] || [ "$JID_RES" = "jid2"];
+then
+  echo "*****   0_filter         : DONE         **"
+else
+  jid0=$(sbatch ${jobfile0})
+fi
+
+
+if [ "$JID_RES" = "jid2" ];
+then
+  echo "*****   1_raxml         : DONE         **"
+elif [ "$JID_RES" = jid1 ]
+then
+  jid1=$(sbatch ${jobfile1})
+else
+  jid1=$(sbatch --dependency=afterok:${jid0##* } ${jobfile1})
+fi
