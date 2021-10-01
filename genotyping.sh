@@ -734,7 +734,7 @@ cat > $jobfile11 <<EOA # generate the job file
 #!/bin/bash
 #SBATCH --job-name=11_all
 #SBATCH --partition=carl.p
-#SBATCH --array=0-23
+##SBATCH --array=0-23
 #SBATCH --output=$BASE_DIR/logs/11_all_%A_%a.out
 #SBATCH --error=$BASE_DIR/logs/11_all_%A_%a.err
 #SBATCH --nodes=1
@@ -743,7 +743,8 @@ cat > $jobfile11 <<EOA # generate the job file
 #SBATCH --mem-per-cpu=90G
 #SBATCH --time=4-00:00:00
 
-list=(01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24)
+#list=(01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24)
+list=(_M)
 echo \${list[*]}
 NB=\${list[\${SLURM_ARRAY_TASK_ID}]}
 echo \${NB}

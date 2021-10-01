@@ -47,24 +47,24 @@ out_prefix <- "LAB_bodym_left_54off_pca"
 # -------------------------------------------------------------------------------------------------------------------
 # ANALYSIS
 
-logos_spec <- c(abe = "<img src='/Users/fco/Desktop/PhD/1_CHAPTER1/0_IMAGES/after_python/logos/H_aberrans.l.cairo.png' width='150' /><br>*H. aberrans*",
-  chl = "<img src='/Users/fco/Desktop/PhD/1_CHAPTER1/0_IMAGES/after_python/logos/H_chlorurus.l.cairo.png' width='150' /><br>*H. chlorurus*",
-  flo = "<img src='/Users/fco/Desktop/PhD/1_CHAPTER1/0_IMAGES/after_python/logos/H_floridae.l.cairo.png' width='150' /><br>*H. floridae*",
-  gem = "<img src='/Users/fco/Desktop/PhD/1_CHAPTER1/0_IMAGES/after_python/logos/H_gemma.l.cairo.png' width='150' /><br>*H. gemma*",
-  gum = "<img src='/Users/fco/Desktop/PhD/1_CHAPTER1/0_IMAGES/after_python/logos/H_gumigutta.l.cairo.png' width='150' /><br>*H. gummiguta*",
-  gut = "<img src='/Users/fco/Desktop/PhD/1_CHAPTER1/0_IMAGES/after_python/logos/H_guttavarius.l.cairo.png' width='150' /><br>*H. guttavarius*",
-  ind = "<img src='/Users/fco/Desktop/PhD/1_CHAPTER1/0_IMAGES/after_python/logos/H_indigo.l.cairo.png' width='150' /><br>*H. indigo*",
-  may = "<img src='/Users/fco/Desktop/PhD/1_CHAPTER1/0_IMAGES/after_python/logos/H_maya.l.cairo.png' width='150' /><br>*H. maya*",
-  nig = "<img src='/Users/fco/Desktop/PhD/1_CHAPTER1/0_IMAGES/after_python/logos/H_nigricans.l.cairo.png' width='150' /><br>*H. nigricans*",
-  pue = "<img src='/Users/fco/Desktop/PhD/1_CHAPTER1/0_IMAGES/after_python/logos/H_puella.l.cairo.png' width='150' /><br>*H. puella*",
-  ran = "<img src='/Users/fco/Desktop/PhD/1_CHAPTER1/0_IMAGES/after_python/logos/H_randallorum.l.cairo.png' width='150' /><br>*H. randallorum*",
-  tan = "<img src='/Users/fco/Desktop/PhD/1_CHAPTER1/0_IMAGES/after_python/logos/H_tan.l.cairo.png' width='150' /><br>*Hypoplectrus sp*",
-  uni = "<img src='/Users/fco/Desktop/PhD/1_CHAPTER1/0_IMAGES/after_python/logos/H_unicolor.l.cairo.png' width='150' /><br>*H. unicolor*")
+logos_spec <- c(abe = "<img src='/Users/fco/Desktop/PhD/1_CHAPTER1/0_IMAGES/after_python/logos/H_aberrans.l.cairo.png' width='120' /><br>*H. aberrans*",
+  chl = "<img src='/Users/fco/Desktop/PhD/1_CHAPTER1/0_IMAGES/after_python/logos/H_chlorurus.l.cairo.png' width='120' /><br>*H. chlorurus*",
+  flo = "<img src='/Users/fco/Desktop/PhD/1_CHAPTER1/0_IMAGES/after_python/logos/H_floridae.l.cairo.png' width='120' /><br>*H. floridae*",
+  gem = "<img src='/Users/fco/Desktop/PhD/1_CHAPTER1/0_IMAGES/after_python/logos/H_gemma.l.cairo.png' width='120' /><br>*H. gemma*",
+  gum = "<img src='/Users/fco/Desktop/PhD/1_CHAPTER1/0_IMAGES/after_python/logos/H_gumigutta.l.cairo.png' width='120' /><br>*H. gummiguta*",
+  gut = "<img src='/Users/fco/Desktop/PhD/1_CHAPTER1/0_IMAGES/after_python/logos/H_guttavarius.l.cairo.png' width='120' /><br>*H. guttavarius*",
+  ind = "<img src='/Users/fco/Desktop/PhD/1_CHAPTER1/0_IMAGES/after_python/logos/H_indigo.l.cairo.png' width='120' /><br>*H. indigo*",
+  may = "<img src='/Users/fco/Desktop/PhD/1_CHAPTER1/0_IMAGES/after_python/logos/H_maya.l.cairo.png' width='120' /><br>*H. maya*",
+  nig = "<img src='/Users/fco/Desktop/PhD/1_CHAPTER1/0_IMAGES/after_python/logos/H_nigricans.l.cairo.png' width='120' /><br>*H. nigricans*",
+  pue = "<img src='/Users/fco/Desktop/PhD/1_CHAPTER1/0_IMAGES/after_python/logos/H_puella.l.cairo.png' width='120' /><br>*H. puella*",
+  ran = "<img src='/Users/fco/Desktop/PhD/1_CHAPTER1/0_IMAGES/after_python/logos/H_randallorum.l.cairo.png' width='120' /><br>*H. randallorum*",
+  tan = "<img src='/Users/fco/Desktop/PhD/1_CHAPTER1/0_IMAGES/after_python/logos/H_tan.l.cairo.png' width='120' /><br>*Hypoplectrus sp*",
+  uni = "<img src='/Users/fco/Desktop/PhD/1_CHAPTER1/0_IMAGES/after_python/logos/H_unicolor.l.cairo.png' width='120' /><br>*H. unicolor*")
 
 logos_loc <- c(bel = "Belize", #<img src='/Users/fco/Desktop/PhD/1_CHAPTER1/0_IMAGES/after_python/logos/belize.png' width='100' /><br>
                boc = "Panama", #<img src='/Users/fco/Desktop/PhD/1_CHAPTER1/0_IMAGES/after_python/logos/pan.png' width='100' /><br>
                flo = "Florida", #<img src='/Users/fco/Desktop/PhD/1_CHAPTER1/0_IMAGES/after_python/logos/us.png' width='100' /><br>
-               por = "Puerto Rico") #<img src='/Users/fco/Desktop/PhD/1_CHAPTER1/0_IMAGES/after_python/logos/puer.png' width='100' /><br>
+               pue = "Puerto Rico") #<img src='/Users/fco/Desktop/PhD/1_CHAPTER1/0_IMAGES/after_python/logos/puer.png' width='100' /><br>
 
 spec_colors <- c('#ff007f', '#00ffd8', '#17202A','#C0392B', '#27AE60','#2E86C1','#F4D03F','#8E44AD','#E67E22','#F772CB','#591402','#3F5202','#1010D4')
 
@@ -73,6 +73,16 @@ data <- read.csv(data_path, sep = ",")
 print(data)
 # names(data) <- c("PC1", "PC2", "PC3", "PC4", "PC5", "PC6", "PC7", "PC8", "PC9", "PC10", "PC11", "PC12", "PC13", "PC14", "PC15", "images")
 data["id"] <- gsub("\\-.*","",data$images)
+data <- data %>% mutate(id = gsub("por", "pue", id),
+                      id = gsub("AG9RX", "AG9RX_", id),
+                      id = gsub("PL17_0", "PL17_", id),
+                      id = gsub("PL17_1uniboc", "PL17_01uniboc", id),
+                      id = gsub("PL17_2pueboc", "PL17_02pueboc", id),
+                      id = gsub("PL17_4pueboc", "PL17_04pueboc", id),
+                      id = gsub("PL17_5pueboc", "PL17_05pueboc", id),
+                      id = gsub("PL17_160pueflo", "PL17_160floflo", id),
+                      id = gsub("PL17_125tanbel", "PL17_125ranbel", id),
+                      id = gsub("PL17_62puepue", "PL17_62chlpue", id))
 data["geo"] <- stri_sub(data$id,-3,-1)
 data["spec"] <- stri_sub(data$id,-6,-4)
 print(data)
@@ -90,7 +100,7 @@ centroids["im"] <- c(abe = "<img src='/Users/fco/Desktop/PhD/1_CHAPTER1/0_IMAGES
                      tan = "<img src='/Users/fco/Desktop/PhD/1_CHAPTER1/0_IMAGES/after_python/logos/H_tan.l.cairo.png' width='100' /><br>*H. affinis*",
                      uni = "<img src='/Users/fco/Desktop/PhD/1_CHAPTER1/0_IMAGES/after_python/logos/H_unicolor.l.cairo.png' width='100' /><br>*H. unicolor*")
 
-centroids["geo"] <- c("bel","bel","bel","bel","bel","bel","bel","bel")
+centroids["geo"] <- c("bel","bel","bel","bel","bel","bel","bel","bel","bel")
 # meta_table_centroid <- merge(meta_table_centroid, logos_spec_df, by="spec")
 print(centroids)
 print(meta_table_centroid)
@@ -120,20 +130,20 @@ p2 <- ggplot(meta_table_centroid,aes(x=PC1.x,y=PC2.x,color=spec, shape=geo)) + g
       labs(x = paste0("PC1, var =  ", format(round(variance$variation[1] * 100, 1), nsmall = 1), " %") , y = paste0("PC2, var = ", format(round(variance$variation[2] * 100, 1), nsmall = 1), " %"))
 p2 <- p2 + scale_color_manual(values=spec_colors,
                               labels = logos_spec) + scale_shape_manual(values=c(15,19,17), labels=logos_loc) + 
-  theme(legend.position="bottom",legend.title=element_blank(),legend.box = "vertical",legend.text =  element_markdown(size = 39),
+  theme(legend.position="bottom",legend.title=element_blank(),legend.box = "vertical",legend.text =  element_markdown(size = 25),
         panel.background = element_blank(), panel.border = element_rect(colour = "black", fill=NA, size=0.9),
         text = element_text(size=50), legend.key=element_blank()) +
   guides(color = guide_legend(nrow = 1))
 
 
-p2 <- ggplot(centroids,aes(x=im,y=im,color=im)) +
-  labs(x = paste0("PC1, var =  ", format(round(variance$variation[1] * 100, 1), nsmall = 1), " %") , y = paste0("PC2, var = ", format(round(variance$variation[2] * 100, 1), nsmall = 1), " %"))
-p2 <- p2 + scale_color_manual(values=logos_spec,
-                              labels = logos_spec) +
-  theme(legend.position="bottom",legend.title=element_blank(),legend.box = "vertical",legend.text =  element_markdown(size = 30),
-        panel.background = element_blank(), panel.border = element_rect(colour = "black", fill=NA, size=0.9),
-        text = element_text(size=30), legend.key=element_blank()) +
-  guides(color = guide_legend(nrow = 1))
+# p2 <- ggplot(centroids,aes(x=im,y=im,color=im)) +
+#   labs(x = paste0("PC1, var =  ", format(round(variance$variation[1] * 100, 1), nsmall = 1), " %") , y = paste0("PC2, var = ", format(round(variance$variation[2] * 100, 1), nsmall = 1), " %"))
+# p2 <- p2 + scale_color_manual(values=logos_spec,
+#                               labels = logos_spec) +
+#   theme(legend.position="bottom",legend.title=element_blank(),legend.box = "vertical",legend.text =  element_markdown(size = 30),
+#         panel.background = element_blank(), panel.border = element_rect(colour = "black", fill=NA, size=0.9),
+#         text = element_text(size=30), legend.key=element_blank()) +
+#   guides(color = guide_legend(nrow = 1))
 # p3 <- ggplot(data,aes(x=PC1,y=PC3,color=spec)) + geom_point(data=centroids, size = 8) + 
 #       labs(x = paste0("PC1, var =  ", format(round(variance$variation[1], 1), nsmall = 1), " %") , y = paste0("PC3, var = ", format(round(variance$variation[3], 1), nsmall = 1), " %"))
 # p3 <- p3 + scale_color_manual(values=spec_colors,
@@ -168,8 +178,8 @@ p2 <- p2 + scale_color_manual(values=logos_spec,
 
 hypo_save(filename = paste0(figure_path,out_prefix,"_no_floridae_kosmas_PC1-2.pdf"),
           plot = p2,
-          width = 32,
-          height = 26)
+          width = 28,
+          height = 22)
 # 
 # hypo_save(filename = paste0(figure_path,out_prefix,"_no_floridae_kosmas_PC1-3.pdf"),
 #           plot = p3,
