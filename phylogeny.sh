@@ -136,10 +136,85 @@ EOA
 
 
 
+# ------------------------------------------------------------------------------
+# Job 2
+
+jobfile2=2_extractCOI.tmp # temp file
+cat > $jobfile2 <<EOA # generate the job file
+#!/bin/bash
+#SBATCH --job-name=2_extractCOI
+#SBATCH --partition=carl.p
+#SBATCH --output=$BASE_DIR/logs/2_extractCOI_%A_%a.out
+#SBATCH --error=$BASE_DIR/logs/2_extractCOI_%A_%a.err
+#SBATCH --nodes=1
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=1
+#SBATCH --mem-per-cpu=20G
+#SBATCH --time=04:00:00
+
+vcftools \
+    --gzvcf $BASE_DIR/outputs/6_genotyping/6_2_all/LG_M/filterd.all_sites.LG_M.vcf.gz \
+    --chr LG_M \
+    --from-bp 13393 \
+    --to-bp 14044 \
+    --max-missing 0.33 \
+    --mac 2 \
+    --thin 5000 \
+    --recode \
+    --stdout | grep -v ‘##’ > $BASE_DIR/outputs/7_phylogeny/7_2_coi/coi_filterd_0.33_mac2_5kb.vcf
+
+
+vcf-to-tab < $BASE_DIR/outputs/7_phylogeny/7_1_whg/coi_filterd_0.33_mac2_5kb.vcf | sed -e 's/\.\/\./N\/N/g' -e 's/\.\//N\/N/g' -e 's/[ACGTN\*]\/\*/N\/N/g' > $BASE_DIR/outputs/7_phylogeny/7_1_whg/coi_filterd_0.33_mac2_5kb.tab
+   
+perl $BASE_DIR/vcf_tab_to_fasta_alignment.pl -i $BASE_DIR/outputs/7_phylogeny/7_1_whg/coi_filterd_0.33_mac2_5kb.tab > $BASE_DIR/outputs/7_phylogeny/7_1_whg/coi_filterd_0.33_mac2_5kb.fas
+
+
+EOA
+
+
+
+# ------------------------------------------------------------------------------
+# Job 3
+
+jobfile3=3_COIraxml.tmp # temp file
+cat > $jobfile3 <<EOA # generate the job file
+#!/bin/bash
+#SBATCH --job-name=3_COIraxml
+#SBATCH --partition=carl.p
+#SBATCH --output=$BASE_DIR/logs/3_COIraxml_%A_%a.out
+#SBATCH --error=$BASE_DIR/logs/3_COIraxml_%A_%a.err
+#SBATCH --nodes=1
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=1
+#SBATCH --mem-per-cpu=20G
+#SBATCH --time=04:00:00
+
+
+ml hpc-env/8.3 CMake/3.15.3-GCCcore-8.3.0 intel/2019b
+
+# Reconstruct phylogeny
+   # Note: number of invariant sites for Felsenstein correction was calculated as number of
+   # variant sites in alignment (109,660) / genome-wide proportion of variant sites
+   # (0.05) * genome-wide proportion of invariant sites (0.95)
+   ~/apps/raxml-ng/bin/raxml-ng --all \
+     --msa $BASE_DIR/outputs/7_phylogeny/7_2_coi/coi_filterd_0.33_mac2_5kb.fas \
+     --model GTR+G+ASC_FELS{2083540} \
+     --tree pars{20},rand{20} \
+     --bs-trees 100 \
+     --threads 24 \
+     --worker 4 \
+     --seed 123 \
+     --prefix $BASE_DIR/outputs/7_phylogeny/7_2_coi/coi_filterd_0.33_mac2_5kb
+
+
+EOA
+
+
+
 # ********** Schedule the job launching ***********
 # -------------------------------------------------
 
-if [ "$JID_RES" = "jid1" ] || [ "$JID_RES" = "jid2"];
+if [ "$JID_RES" = "jid1" ] || [ "$JID_RES" = "jid2"] || [ "$JID_RES" = "jid3" ];
 then
   echo "*****   0_filter         : DONE         **"
 else
@@ -147,12 +222,32 @@ else
 fi
 
 
-if [ "$JID_RES" = "jid2" ];
+if [ "$JID_RES" = "jid2" ] || [ "$JID_RES" = "jid3" ];
 then
   echo "*****   1_raxml         : DONE         **"
 elif [ "$JID_RES" = jid1 ]
 then
   jid1=$(sbatch ${jobfile1})
-else
+else      
   jid1=$(sbatch --dependency=afterok:${jid0##* } ${jobfile1})
 fi
+
+
+if [ "$JID_RES" = "jid3"];
+then
+  echo "*****   2_extractCOI    : DONE         **"
+elif [ "$JID_RES" = "jid2" ]
+then
+  jid2=$(sbatch ${jobfile2})
+else
+  jid2=$(sbatch --dependency=afterok:${jid1##* } ${jobfile2})
+fi
+
+
+if [ "$JID_RES" = "jid3"];
+then
+  jid3=$(sbatch ${jobfile3})
+else
+  jid3=$(sbatch --dependency=afterok:${jid2##* } ${jobfile3})
+fi
+
