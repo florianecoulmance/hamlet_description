@@ -74,16 +74,16 @@ vcftools \
     --mac 4 \
     --thin 5000 \
     --recode \
-    --out $BASE_DIR/outputs/7_phylogeny/7_1_whg/snp_filterd_0.33_mac1_5kb
+    --out $BASE_DIR/outputs/7_phylogeny/7_1_whg/snp_filterd_0.33_mac4_5kb
 
 # Convert to fasta format (Perl script available at https://github.com/JinfengChen/vcf-tab-to-fasta)
 #wget https://raw.githubusercontent.com/JinfengChen/vcf-tab-to-fasta/master/vcf_tab_to_fasta_alignment.pl
 
 #vcf-to-tab < $BASE_DIR/outputs/7_phylogeny/7_1_whg/snp_filterd_0.33_mac1_5kb.recode.vcf > $BASE_DIR/outputs/7_phylogeny/7_1_whg/snp_filterd_0.33_mac1_5kb.tab
 
-vcf-to-tab < $BASE_DIR/outputs/7_phylogeny/7_1_whg/snp_filterd_0.33_mac1_5kb.recode.vcf | sed -e 's/\.\/\./N\/N/g' -e 's/\.\//N\/N/g' -e 's/[ACGTN\*]\/\*/N\/N/g' > $BASE_DIR/outputs/7_phylogeny/7_1_whg/snp_filterd_0.33_mac1_5kb.tab
+vcf-to-tab < $BASE_DIR/outputs/7_phylogeny/7_1_whg/snp_filterd_0.33_mac4_5kb.recode.vcf | sed -e 's/\.\/\./N\/N/g' -e 's/\.\//N\/N/g' -e 's/[ACGTN\*]\/\*/N\/N/g' > $BASE_DIR/outputs/7_phylogeny/7_1_whg/snp_filterd_0.33_mac4_5kb.tab
    
-perl $BASE_DIR/vcf_tab_to_fasta_alignment.pl -i $BASE_DIR/outputs/7_phylogeny/7_1_whg/snp_filterd_0.33_mac1_5kb.tab > $BASE_DIR/outputs/7_phylogeny/7_1_whg/snp_filterd_0.33_mac1_5kb.fas
+perl $BASE_DIR/vcf_tab_to_fasta_alignment.pl -i $BASE_DIR/outputs/7_phylogeny/7_1_whg/snp_filterd_0.33_mac4_5kb.tab > $BASE_DIR/outputs/7_phylogeny/7_1_whg/snp_filterd_0.33_mac4_5kb.fas
 
 
 EOA
@@ -122,14 +122,14 @@ ml hpc-env/8.3 CMake/3.15.3-GCCcore-8.3.0 intel/2019b
    # variant sites in alignment (109,660) / genome-wide proportion of variant sites
    # (0.05) * genome-wide proportion of invariant sites (0.95)
    ~/apps/raxml-ng/bin/raxml-ng --all \
-     --msa $BASE_DIR/outputs/7_phylogeny/7_1_whg/snp_filterd_0.33_mac1_5kb.fas \
-     --model GTR+G+ASC_FELS{2083540} \
+     --msa $BASE_DIR/outputs/7_phylogeny/7_1_whg/test1 \
+     --model GTGTR+G+ASC_FELS{2083540} \
      --tree pars{20},rand{20} \
      --bs-trees 100 \
      --threads 24 \
      --worker 4 \
      --seed 123 \
-     --prefix $BASE_DIR/outputs/7_phylogeny/7_1_whg/snp_filterd_0.33_mac1_5kb
+     --prefix $BASE_DIR/outputs/7_phylogeny/7_1_whg/test1
 
 
 EOA
