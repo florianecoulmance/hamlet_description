@@ -754,17 +754,17 @@ gatk --java-options "-Xmx85g" \
     -R $BASE_DIR/ressources/HP_genome_unmasked_01.fa \
     -L LG\${NB} \
     -V $BASE_DIR/outputs/5_cohort/cohort.g.vcf.gz  \
-    -O $BASE_DIR/6_genotyping/6_2_all/intermediate.LG\${NB}.vcf.gz \
+    -O $BASE_DIR/outputs/6_genotyping/6_2_all/intermediate.LG\${NB}.vcf.gz \
     --include-non-variant-sites=true
 
 gatk --java-options "-Xmx85G" \
     SelectVariants \
     -R $BASE_DIR/ressources/HP_genome_unmasked_01.fa \
-    -V $BASE_DIR/6_genotyping/6_2_all/intermediate.LG\${NB}.vcf.gz \
+    -V $BASE_DIR/outputs/6_genotyping/6_2_all/intermediate.LG\${NB}.vcf.gz \
     --select-type-to-exclude=INDEL \
-    -O $BASE_DIR/6_genotyping/6_2_all/all_sites.LG\${NB}.vcf.gz
+    -O $BASE_DIR/outputs/6_genotyping/6_2_all/all_sites.LG\${NB}.vcf.gz
 
-#rm $BASE_DIR/6_genotyping/6_2_all/intermediate.*
+#rm $BASE_DIR/outputs/6_genotyping/6_2_all/intermediate.*
 
 
 EOA

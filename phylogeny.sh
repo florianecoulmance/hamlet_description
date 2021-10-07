@@ -63,25 +63,27 @@ cat > $jobfile0 <<EOA # generate the job file
 #SBATCH --mem-per-cpu=20G
 #SBATCH --time=04:00:00
 
-zcat < $BASE_DIR/outputs/6_genotyping/6_1_snp/snp_filterd.vcf.gz | \
-       sed -e s/"1|0"/".|."/g -e s/"0|1"/".|."/g | \
-       gzip > $BASE_DIR/outputs/7_phylogeny/7_1_whg/snp_filterd_n.vcf.gz
+#zcat < $BASE_DIR/outputs/6_genotyping/6_1_snp/snp_filterd.vcf.gz | \
+#       sed -e s/"1|0"/".|."/g -e s/"0|1"/".|."/g | \
+#       gzip > $BASE_DIR/outputs/7_phylogeny/7_1_whg/snp_filterd_n.vcf.gz
 
 
 vcftools \
-    --gzvcf $BASE_DIR/outputs/7_phylogeny/7_1_whg/snp_filterd_n.vcf.gz \
+    --gzvcf $BASE_DIR/outputs/6_genotyping/6_1_snp/snp_filterd.vcf.gz \
     --max-missing 0.33 \
     --mac 4 \
     --thin 5000 \
     --recode \
-    --out $BASE_DIR/outputs/7_phylogeny/7_1_whg/snp_filterd_n_0.33_mac4_5kb
+    --out $BASE_DIR/outputs/7_phylogeny/7_1_whg/snp_filterd_0.33_mac1_5kb
 
 # Convert to fasta format (Perl script available at https://github.com/JinfengChen/vcf-tab-to-fasta)
-wget https://raw.githubusercontent.com/JinfengChen/vcf-tab-to-fasta/master/vcf_tab_to_fasta_alignment.pl
+#wget https://raw.githubusercontent.com/JinfengChen/vcf-tab-to-fasta/master/vcf_tab_to_fasta_alignment.pl
 
-vcf-to-tab < $BASE_DIR/outputs/7_phylogeny/7_1_whg/snp_filterd_n_0.33_mac4_5kb.vcf > $BASE_DIR/outputs/7_phylogeny/7_1_whg/snp_filterd_n_0.33_mac4_5kb.tab
+#vcf-to-tab < $BASE_DIR/outputs/7_phylogeny/7_1_whg/snp_filterd_0.33_mac1_5kb.recode.vcf > $BASE_DIR/outputs/7_phylogeny/7_1_whg/snp_filterd_0.33_mac1_5kb.tab
+
+vcf-to-tab < $BASE_DIR/outputs/7_phylogeny/7_1_whg/snp_filterd_0.33_mac1_5kb.recode.vcf | sed -e 's/\.\/\./N\/N/g' -e 's/\.\//N\/N/g' -e 's/[ACGTN\*]\/\*/N\/N/g' > $BASE_DIR/outputs/7_phylogeny/7_1_whg/snp_filterd_0.33_mac1_5kb.tab
    
-perl ~/apps/vcf-tab-to-fasta/vcf_tab_to_fasta_alignment.pl -i $BASE_DIR/outputs/7_phylogeny/7_1_whg/snp_filterd_n_0.33_mac4_5kb.tab > $BASE_DIR/outputs/7_phylogeny/7_1_whg/snp_filterd_n_0.33_mac4_5kb.fas
+perl $BASE_DIR/vcf_tab_to_fasta_alignment.pl -i $BASE_DIR/outputs/7_phylogeny/7_1_whg/snp_filterd_0.33_mac1_5kb.tab > $BASE_DIR/outputs/7_phylogeny/7_1_whg/snp_filterd_0.33_mac1_5kb.fas
 
 
 EOA
@@ -105,19 +107,29 @@ cat > $jobfile1 <<EOA # generate the job file
 #SBATCH --time=04:00:00
 
 
+#wget https://github.com/amkozlov/raxml-ng/releases/download/1.0.1/raxml-ng_v1.0.1_linux_x86_64_MPI.zip
+
+#mkdir build && cd build
+
+#cmake -DUSE_MPI=ON -DCMAKE_C_COMPILER=$HOME/anaconda3/envs/raxml/bin/x86_64-conda_cos6-linux-gnu-gcc -DCMAKE_CXX_COMPILER=$HOME/anaconda3/envs/raxml/bin/x86_64-conda_cos6-linux-gnu-cpp -S=$HOME/software/raxml ..
+
+#conda deactivate
+
+ml hpc-env/8.3 CMake/3.15.3-GCCcore-8.3.0 intel/2019b
+
 # Reconstruct phylogeny
    # Note: number of invariant sites for Felsenstein correction was calculated as number of
    # variant sites in alignment (109,660) / genome-wide proportion of variant sites
    # (0.05) * genome-wide proportion of invariant sites (0.95)
-   raxml-NG --all \
-     --msa $BASE_DIR/outputs/7_phylogeny/7_1_whg/snp_filterd_n_0.33_mac4_5kb.fas \
+   ~/apps/raxml-ng/bin/raxml-ng --all \
+     --msa $BASE_DIR/outputs/7_phylogeny/7_1_whg/snp_filterd_0.33_mac1_5kb.fas \
      --model GTR+G+ASC_FELS{2083540} \
      --tree pars{20},rand{20} \
      --bs-trees 100 \
      --threads 24 \
      --worker 4 \
      --seed 123 \
-     --prefix $BASE_DIR/outputs/7_phylogeny/7_1_whg/snp_filterd_n_0.33_mac4_5kb
+     --prefix $BASE_DIR/outputs/7_phylogeny/7_1_whg/snp_filterd_0.33_mac1_5kb
 
 
 EOA
