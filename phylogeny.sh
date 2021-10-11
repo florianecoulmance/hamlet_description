@@ -64,17 +64,17 @@ cat > $jobfile0 <<EOA # generate the job file
 #SBATCH --time=04:00:00
 
 
-zcat < $BASE_DIR/outputs/6_genotyping/6_1_snp/snp_filterd.vcf.gz | \
-       sed -e 's/1\/0/\.\/\./g' -e 's/0\/1/\.\/\./g' | \
-       gzip > $BASE_DIR/outputs/7_phylogeny/7_1_whg/snp_filterd_n.vcf.gz
+# zcat < $BASE_DIR/outputs/6_genotyping/6_1_snp/snp_filterd.vcf.gz | \
+#        sed -e 's/1\/0/\.\/\./g' -e 's/0\/1/\.\/\./g' | \
+#        gzip > $BASE_DIR/outputs/7_phylogeny/7_1_whg/snp_filterd_n.vcf.gz
 
 vcftools \
-    --gzvcf $BASE_DIR/outputs/7_phylogeny/7_1_whg/snp_filterd_n.vcf.gz \
+    --gzvcf $BASE_DIR/outputs/7_phylogeny/7_1_whg/snp_filterd.vcf.gz \
     --max-missing 0.33 \
     --mac 2 \
     --thin 5000 \
     --recode \
-    --out $BASE_DIR/outputs/7_phylogeny/7_1_whg/snp_filterd_0.33_mac2_5kb_n
+    --out $BASE_DIR/outputs/7_phylogeny/7_1_whg/snp_filterd_0.33_mac2_5kb_h
 
 
 # Convert to fasta format (Perl script available at https://github.com/JinfengChen/vcf-tab-to-fasta)
@@ -82,9 +82,11 @@ vcftools \
 
 #vcf-to-tab < $BASE_DIR/outputs/7_phylogeny/7_1_whg/snp_filterd_0.33_mac1_5kb.recode.vcf > $BASE_DIR/outputs/7_phylogeny/7_1_whg/snp_filterd_0.33_mac1_5kb.tab
 
-vcf-to-tab < $BASE_DIR/outputs/7_phylogeny/7_1_whg/snp_filterd_0.33_mac2_5kb_n.recode.vcf | sed -e 's/\.\/\./N\/N/g' -e 's/\.\//N\/N/g' -e 's/[ACGTN\*]\/\*/N\/N/g' > $BASE_DIR/outputs/7_phylogeny/7_1_whg/snp_filterd_0.33_mac2_5kb_n.tab
-   
-perl $BASE_DIR/vcf_tab_to_fasta_alignment.pl -i $BASE_DIR/outputs/7_phylogeny/7_1_whg/snp_filterd_0.33_mac2_5kb_n.tab > $BASE_DIR/outputs/7_phylogeny/7_1_whg/snp_filterd_0.33_mac2_5kb_n.fas
+#vcf-to-tab < $BASE_DIR/outputs/7_phylogeny/7_1_whg/snp_filterd_0.33_mac2_5kb_n.recode.vcf | sed -e 's/\.\/\./N\/N/g' -e 's/\.\//N\/N/g' -e 's/[ACGTN\*]\/\*/N\/N/g' > $BASE_DIR/outputs/7_phylogeny/7_1_whg/snp_filterd_0.33_mac2_5kb_n.tab
+
+vcf-to-tab < $BASE_DIR/outputs/7_phylogeny/7_1_whg/snp_filterd_0.33_mac2_5kb_h.recode.vcf > $BASE_DIR/outputs/7_phylogeny/7_1_whg/snp_filterd_0.33_mac2_5kb_h.tab
+  
+perl $BASE_DIR/vcf_tab_to_fasta_alignment.pl -i $BASE_DIR/outputs/7_phylogeny/7_1_whg/snp_filterd_0.33_mac2_5kb_h.tab > $BASE_DIR/outputs/7_phylogeny/7_1_whg/snp_filterd_0.33_mac2_5kb_h.fas
 
 
 EOA
@@ -123,14 +125,14 @@ ml hpc-env/8.3 CMake/3.15.3-GCCcore-8.3.0 intel/2019b
    # variant sites in alignment (109,660) / genome-wide proportion of variant sites
    # (0.05) * genome-wide proportion of invariant sites (0.95)
    ~/apps/raxml-ng/bin/raxml-ng --all \
-     --msa $BASE_DIR/outputs/7_phylogeny/7_1_whg/snp_filterd_0.33_mac2_5kb_n.fas \
+     --msa $BASE_DIR/outputs/7_phylogeny/7_1_whg/snp_filterd_0.33_mac2_5kb_h.fas \
      --model GTR+G+ASC_FELS{2083540} \
      --tree pars{20},rand{20} \
      --bs-trees 100 \
      --threads 24 \
      --worker 4 \
      --seed 123 \
-     --prefix $BASE_DIR/outputs/7_phylogeny/7_1_whg/snp_filterd_0.33_mac2_5kb_n
+     --prefix $BASE_DIR/outputs/7_phylogeny/7_1_whg/snp_filterd_0.33_mac2_5kb_h
 
 
 EOA
