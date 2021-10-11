@@ -1,3 +1,0 @@
-Using GATK jar /user/doau0129/miniconda3/share/gatk4-4.1.7.0-0/gatk-package-4.1.7.0-local.jar
-Running:
-    java -Dsamjdk.use_async_io_read_samtools=false -Dsamjdk.use_async_io_write_samtools=true -Dsamjdk.use_async_io_write_tribble=false -Dsamjdk.compression_level=2 -Xmx75G -jar /user/doau0129/miniconda3/share/gatk4-4.1.7.0-0/gatk-package-4.1.7.0-local.jar SelectVariants -R /user/doau0129/work/hamlet_description//ressources/HP_genome_unmasked_01.fa -V /user/doau0129/work/hamlet_description//outputs/6_genotyping/6_2_all/intermediate.vcf.gz -O /user/doau0129/work/hamlet_description//outputs/6_genotyping/6_2_all/intermediate.filterd.vcf.gz --exclude-filtered --QUIET true --verbosity ERROR
