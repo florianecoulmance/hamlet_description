@@ -64,17 +64,17 @@ cat > $jobfile0 <<EOA # generate the job file
 #SBATCH --time=04:00:00
 
 
-# zcat < $BASE_DIR/outputs/6_genotyping/6_1_snp/snp_filterd.vcf.gz | \
-#        sed -e 's/1\/0/\.\/\./g' -e 's/0\/1/\.\/\./g' | \
-#        gzip > $BASE_DIR/outputs/7_phylogeny/7_1_whg/snp_filterd_n.vcf.gz
+zcat < $BASE_DIR/outputs/6_genotyping/6_1_snp/snp_filterd.vcf.gz | \
+        sed -e s/"1/0"/"./."/g -e s/"0/1"/"./."/g | \
+        gzip > $BASE_DIR/outputs/7_phylogeny/7_1_whg/snp_filterd_nh_quotes.vcf.gz
 
 vcftools \
-    --gzvcf $BASE_DIR/outputs/7_phylogeny/7_1_whg/snp_filterd.vcf.gz \
+    --gzvcf $BASE_DIR/outputs/7_phylogeny/7_1_whg/snp_filterd_nh_quotes.vcf.gz \
     --max-missing 0.33 \
     --mac 2 \
     --thin 5000 \
     --recode \
-    --out $BASE_DIR/outputs/7_phylogeny/7_1_whg/snp_filterd_0.33_mac2_5kb_h
+    --out $BASE_DIR/outputs/7_phylogeny/7_1_whg/snp_filterd_0.33_mac2_5kb_nh_quotes
 
 
 # Convert to fasta format (Perl script available at https://github.com/JinfengChen/vcf-tab-to-fasta)
@@ -82,11 +82,11 @@ vcftools \
 
 #vcf-to-tab < $BASE_DIR/outputs/7_phylogeny/7_1_whg/snp_filterd_0.33_mac1_5kb.recode.vcf > $BASE_DIR/outputs/7_phylogeny/7_1_whg/snp_filterd_0.33_mac1_5kb.tab
 
-#vcf-to-tab < $BASE_DIR/outputs/7_phylogeny/7_1_whg/snp_filterd_0.33_mac2_5kb_n.recode.vcf | sed -e 's/\.\/\./N\/N/g' -e 's/\.\//N\/N/g' -e 's/[ACGTN\*]\/\*/N\/N/g' > $BASE_DIR/outputs/7_phylogeny/7_1_whg/snp_filterd_0.33_mac2_5kb_n.tab
+vcf-to-tab < $BASE_DIR/outputs/7_phylogeny/7_1_whg/snp_filterd_0.33_mac2_5kb_nh_quotes.recode.vcf | sed -e 's/\.\/\./N\/N/g' -e 's/\.\//N\/N/g' > $BASE_DIR/outputs/7_phylogeny/7_1_whg/snp_filterd_0.33_mac2_5kb_nh_quotes.tab
 
-vcf-to-tab < $BASE_DIR/outputs/7_phylogeny/7_1_whg/snp_filterd_0.33_mac2_5kb_h.recode.vcf > $BASE_DIR/outputs/7_phylogeny/7_1_whg/snp_filterd_0.33_mac2_5kb_h.tab
+#vcf-to-tab < $BASE_DIR/outputs/7_phylogeny/7_1_whg/snp_filterd_0.33_mac2_5kb_h.recode.vcf > $BASE_DIR/outputs/7_phylogeny/7_1_whg/snp_filterd_0.33_mac2_5kb_h.tab
   
-perl $BASE_DIR/vcf_tab_to_fasta_alignment.pl -i $BASE_DIR/outputs/7_phylogeny/7_1_whg/snp_filterd_0.33_mac2_5kb_h.tab > $BASE_DIR/outputs/7_phylogeny/7_1_whg/snp_filterd_0.33_mac2_5kb_h.fas
+perl $BASE_DIR/vcf_tab_to_fasta_alignment.pl -i $BASE_DIR/outputs/7_phylogeny/7_1_whg/snp_filterd_0.33_mac2_5kb_nh_quotes.tab > $BASE_DIR/outputs/7_phylogeny/7_1_whg/snp_filterd_0.33_mac2_5kb_nh_quotes.fas
 
 
 EOA
@@ -125,14 +125,14 @@ ml hpc-env/8.3 CMake/3.15.3-GCCcore-8.3.0 intel/2019b
    # variant sites in alignment (109,660) / genome-wide proportion of variant sites
    # (0.05) * genome-wide proportion of invariant sites (0.95)
    ~/apps/raxml-ng/bin/raxml-ng --all \
-     --msa $BASE_DIR/outputs/7_phylogeny/7_1_whg/snp_filterd_0.33_mac2_5kb_h.fas \
+     --msa $BASE_DIR/outputs/7_phylogeny/7_1_whg/snp_filterd_0.33_mac2_5kb_nh_quotes.fas \
      --model GTR+G+ASC_FELS{2083540} \
      --tree pars{20},rand{20} \
      --bs-trees 100 \
      --threads 24 \
      --worker 4 \
      --seed 123 \
-     --prefix $BASE_DIR/outputs/7_phylogeny/7_1_whg/snp_filterd_0.33_mac2_5kb_h
+     --prefix $BASE_DIR/outputs/7_phylogeny/7_1_whg/snp_filterd_0.33_mac2_5kb_nh_quotes
 
 
 EOA
@@ -155,27 +155,27 @@ cat > $jobfile2 <<EOA # generate the job file
 #SBATCH --mem-per-cpu=20G
 #SBATCH --time=04:00:00
 
-vcftools \
-    --gzvcf $BASE_DIR/outputs/6_genotyping/6_2_all/LG_M/filterd.all_sites.LG_M.vcf.gz \
-    --chr LG_M \
-    --from-bp 13393 \
-    --to-bp 14044 \
-    --recode \
-    --stdout | gzip > $BASE_DIR/outputs/7_phylogeny/7_2_coi/coi_filterd.vcf.gz
+#vcftools \
+#    --gzvcf $BASE_DIR/outputs/6_genotyping/6_2_all/LG_M/filterd.all_sites.LG_M.vcf.gz \
+#    --chr LG_M \
+#    --from-bp 13393 \
+#    --to-bp 14044 \
+#    --recode \
+#    --stdout | gzip > $BASE_DIR/outputs/7_phylogeny/7_2_coi/coi_filterd.vcf.gz
 
 
-vcftools \
-    --gzvcf $BASE_DIR/outputs/7_phylogeny/7_2_coi/coi_filterd.vcf.gz \
-    --max-missing 0.33 \
-    --mac 2 \
-#    --thin 5000 \
-    --recode \
-    --out $BASE_DIR/outputs/7_phylogeny/7_2_coi/coi_filterd_0.33_mac2_5kb
+#vcftools \
+#    --gzvcf $BASE_DIR/outputs/7_phylogeny/7_2_coi/coi_filterd.vcf.gz \
+#    --max-missing 0.33 \
+#    --mac 2 \
+#    --recode \
+#    --out $BASE_DIR/outputs/7_phylogeny/7_2_coi/coi_filterd_0.33_mac2_5kb
 
+gunzip $BASE_DIR/outputs/7_phylogeny/7_2_coi/coi_filterd.vcf.gz 
 
-vcf-to-tab < $BASE_DIR/outputs/7_phylogeny/7_2_coi/coi_filterd_0.33_mac2_5kb.recode.vcf | sed -e 's/\.\/\./N\/N/g' -e 's/\.\//N\/N/g' -e 's/[ACGTN\*]\/\*/N\/N/g' > $BASE_DIR/outputs/7_phylogeny/7_2_coi/coi_filterd_0.33_mac2_5kb.tab
+vcf-to-tab < $BASE_DIR/outputs/7_phylogeny/7_2_coi/coi_filterd.vcf | sed -e 's/\.\/\./N\/N/g' -e 's/\.\//N\/N/g' > $BASE_DIR/outputs/7_phylogeny/7_2_coi/coi_filterd.tab
    
-perl $BASE_DIR/vcf_tab_to_fasta_alignment.pl -i $BASE_DIR/outputs/7_phylogeny/7_2_coi/coi_filterd_0.33_mac2_5kb.tab > $BASE_DIR/outputs/7_phylogeny/7_2_coi/coi_filterd_0.33_mac2_5kb.fas
+perl $BASE_DIR/vcf_tab_to_fasta_alignment.pl -i $BASE_DIR/outputs/7_phylogeny/7_2_coi/coi_filterd.tab > $BASE_DIR/outputs/7_phylogeny/7_2_coi/coi_filterd.fas
 
 
 EOA
@@ -206,14 +206,13 @@ ml hpc-env/8.3 CMake/3.15.3-GCCcore-8.3.0 intel/2019b
    # variant sites in alignment (109,660) / genome-wide proportion of variant sites
    # (0.05) * genome-wide proportion of invariant sites (0.95)
    ~/apps/raxml-ng/bin/raxml-ng --all \
-     --msa $BASE_DIR/outputs/7_phylogeny/7_2_coi/coi_filterd_0.33_mac2_5kb.fas \
-     --model GTR+G+ASC_FELS{2083540} \
+     --msa $BASE_DIR/outputs/7_phylogeny/7_2_coi/coi_filterd.fas \
+     --model GTR+G \
      --tree pars{20},rand{20} \
      --bs-trees 100 \
      --threads 24 \
-     --worker 4 \
      --seed 123 \
-     --prefix $BASE_DIR/outputs/7_phylogeny/7_2_coi/coi_filterd_0.33_mac2_5kb
+     --prefix $BASE_DIR/outputs/7_phylogeny/7_2_coi/coi_filterd
 
 
 EOA
