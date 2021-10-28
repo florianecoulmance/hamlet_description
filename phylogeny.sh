@@ -50,7 +50,7 @@ mkdir $BASE_DIR/outputs/lof/
 # ------------------------------------------------------------------------------
 # Job 0
 
-jobfile0=0_ubam.tmp # temp file
+jobfile0=0_filter.tmp # temp file
 cat > $jobfile0 <<EOA # generate the job file
 #!/bin/bash
 #SBATCH --job-name=0_filter
