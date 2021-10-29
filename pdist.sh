@@ -55,18 +55,15 @@ cat > $jobfile0 <<EOA # generate the job file
 #SBATCH --time=04:00:00
 
 
-zcat < $BASE_DIR/outputs/6_genotyping/6_2_all/filterd.allBP.vcf.gz | \
-       sed -e 's/|/\//g' -e 's/1\/0/\.\/\./g' -e 's/0\/1/\.\/\./g' | \
-       gzip > $BASE_DIR/outputs/9_pdist/filterd.allBP_nhp.vcf.gz
-
+gunzip -c $BASE_DIR/outputs/6_genotyping/6_2_all/LG_M/filterd.all_sites.LG_M.vcf.gz > $BASE_DIR/outputs/9_pdist/filterd.all_sites.LG_M.vcf
 
 # Convert to fasta format (Perl script available at https://github.com/JinfengChen/vcf-tab-to-fasta)
 #wget https://raw.githubusercontent.com/JinfengChen/vcf-tab-to-fasta/master/vcf_tab_to_fasta_alignment.pl
 
 
-vcf-to-tab < $BASE_DIR/outputs/9_pdist/filterd.allBP_nhp.vcf.gz | sed -e 's/\.\/\./N\/N/g' -e 's/\.\//N\/N/g' > $BASE_DIR/outputs/9_pdist/filterd.allBP_nhp.tab
+vcf-to-tab < $BASE_DIR/outputs/9_pdist/filterd.all_sites.LG_M.vcf | sed -e 's/\.\/\./N\/N/g' -e 's/\.\//N\/N/g' > $BASE_DIR/outputs/9_pdist/filterd.all_sites.LG_M.tab
 
-perl $BASE_DIR/vcf_tab_to_fasta_alignment.pl -i $BASE_DIR/outputs/9_pdist/filterd.allBP_nhp.tab > $BASE_DIR/outputs/9_pdist/filterd.allBP_nhp.fas
+perl $BASE_DIR/vcf_tab_to_fasta_alignment.pl -i $BASE_DIR/outputs/9_pdist/filterd.all_sites.LG_M.tab > $BASE_DIR/outputs/9_pdist/filterd.all_sites.LG_M.fas
 
 
 EOA
